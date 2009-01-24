@@ -4,15 +4,14 @@
 import Image
 import ImageFilter
 import sys
-
 import numpy
 import scipy.misc.pilutil as pilutil
 
 class ShapeFromShading:
 	
-	def __init__(self, path_left_image="lunaleft.jpg", path_right_image="lunaright.jpg",
-		movingwin_xsize=50, movingwin_ysize=50, win_xsize=2300, win_ysize=2400,
-		steprange = 75):
+	def __init__(self, path_left_image="IMG_1376_1.JPG", path_right_image="IMG_1376_1.JPG",
+		movingwin_xsize=20, movingwin_ysize=20, win_xsize=340, win_ysize=560,
+		steprange = 100):
 		
 		self.path_left_image = path_left_image
 		self.path_right_image = path_right_image
@@ -22,7 +21,7 @@ class ShapeFromShading:
 		self.win_ysize = win_ysize
 		self.steprange = steprange
 		
-		self.imL = Image.open(self.path_right_image)
+		self.imL = Image.open(self.path_left_image)
 		self.imR = Image.open(self.path_right_image)
 
 		#metto in una stringa i valori dei pixel (da Image)
@@ -80,7 +79,13 @@ class ShapeFromShading:
 		self.depth_map = numpy.reshape(self.depth_list, (ydimensione, xdimensione))
 		
 	def saveDepthMap(self, nomefile):
-		pilutil.toimage(self.depth_map).filter(ImageFilter.MedianFilter(5)).resize((self.win_xsize, self.win_xsize)).save(nomefile)
+		pilutil.toimage(self.depth_map).filter(ImageFilter.MedianFilter(5)).resize((self.win_xsize, self.win_ysize)).save(nomefile)
+
+
+#example
+test = ShapeFromShading('IMG_1376_1.JPG','IMG_1377_1.JPG', 20, 20, 340, 560, 100)
+test.getDepthMap()
+test.saveDepthMap('depthmap.jpg')
 
 
 
